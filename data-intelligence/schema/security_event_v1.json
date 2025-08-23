@@ -1,0 +1,22 @@
+{
+  "description": "Canonical Schema for all Security Events in Project Leviathan, Version 1.0",
+  "schema": {
+    "eventId": "string",
+    "eventTime": "timestamp",
+    "sourceSystem": "string",
+    "eventName": "string",
+    "eventSource": {
+      "ip": "string",
+      "host": "string",
+      "user": "string",
+      "assetId": "string"
+    },
+    "eventTarget": {
+      "ip": "string",
+      "pod": "string",
+      "assetId": "string"
+    },
+    "eventDetails": "object",
+    "severity": "string"
+  }
+}

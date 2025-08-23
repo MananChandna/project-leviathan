@@ -1,0 +1,14 @@
+{
+  "eventId": "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+  "eventTime": "2025-08-23T12:35:10Z",
+  "sourceSystem": "kyverno",
+  "eventName": "POLICY_VIOLATION",
+  "eventSource": { "user": "cicd-pipeline-sa" },
+  "eventTarget": { "pod": "attempted-unsigned-pod-1" },
+  "eventDetails": {
+    "policy": "require-signed-images",
+    "image": "nginx:latest",
+    "reason": "Image is not signed by Cosign"
+  },
+  "severity": "high"
+}

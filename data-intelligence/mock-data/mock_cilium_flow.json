@@ -1,0 +1,10 @@
+{
+  "eventId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "eventTime": "2025-08-23T12:30:00Z",
+  "sourceSystem": "cilium",
+  "eventName": "NETWORK_FLOW",
+  "eventSource": { "ip": "10.0.1.15", "pod": "frontend-app-pod-1" },
+  "eventTarget": { "ip": "10.0.2.25", "pod": "backend-api-pod-1" },
+  "eventDetails": { "protocol": "tcp", "port": 8080, "verdict": "allowed" },
+  "severity": "info"
+}
