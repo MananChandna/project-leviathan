@@ -1,0 +1,17 @@
+# data-intelligence/deploy/vault-values.yaml
+ui:
+  enabled: true
+server:
+  standalone:
+    enabled: true
+  dataStorage:
+    enabled: true
+    size: 1Gi
+    storageClass: null
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi

@@ -1,0 +1,13 @@
+# data-intelligence/deploy/falco-values.yaml
+
+# Enable the Falcosidekick companion tool
+falcosidekick:
+  enabled: true
+  # Configure Falcosidekick to send all alerts to our Kafka cluster
+  config:
+    kafka:
+      # The address format is <service-name>.<namespace>.svc.cluster.local:<port>
+      # We defined our Kafka service in the 'kafka' namespace.
+      brokers: "kafka.kafka.svc.cluster.local:9092"
+      topic: "falco-alerts"
+

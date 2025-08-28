@@ -1,0 +1,38 @@
+[
+    {
+        "RoleName": "anomaly-detection-function-role-fwcstz3n",
+        "Arn": "arn:aws:iam::952035287339:role/service-role/anomaly-detection-function-role-fwcstz3n"
+    },
+    {
+        "RoleName": "AWSGlueServiceRole-glue-titanic-crawler-role",
+        "Arn": "arn:aws:iam::952035287339:role/service-role/AWSGlueServiceRole-glue-titanic-crawler-role"
+    },
+    {
+        "RoleName": "AWSServiceRoleForSupport",
+        "Arn": "arn:aws:iam::952035287339:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport"
+    },
+    {
+        "RoleName": "AWSServiceRoleForTrustedAdvisor",
+        "Arn": "arn:aws:iam::952035287339:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor"
+    },
+    {
+        "RoleName": "EC2-S3-Access-Role",
+        "Arn": "arn:aws:iam::952035287339:role/EC2-S3-Access-Role"
+    },
+    {
+        "RoleName": "GlueServiceRole",
+        "Arn": "arn:aws:iam::952035287339:role/GlueServiceRole"
+    },
+    {
+        "RoleName": "KinesisFirehoseServiceRole-newsapi-fire-ap-south-1-1747180318235",
+        "Arn": "arn:aws:iam::952035287339:role/service-role/KinesisFirehoseServiceRole-newsapi-fire-ap-south-1-1747180318235"
+    },
+    {
+        "RoleName": "LambdaNewsIngestRole",
+        "Arn": "arn:aws:iam::952035287339:role/LambdaNewsIngestRole"
+    },
+    {
+        "RoleName": "ProwlerAuditRole",
+        "Arn": "arn:aws:iam::952035287339:role/ProwlerAuditRole"
+    }
+]
