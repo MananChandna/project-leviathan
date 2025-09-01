@@ -1,58 +1,48 @@
-# data-intelligence/etl/main.py
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, TimestampType, MapType
-from pyspark.sql.functions import col, lit, current_timestamp
+from pyspark.sql.functions import lit
 
 def main():
-    # 1. Initialize Spark Session
-    # This is the entry point to any Spark functionality.
     spark = SparkSession.builder \
-        .appName("ProjectLeviathanETL_v1") \
+        .appName("AssetInventoryToNeo4j") \
         .getOrCreate()
 
-    print("Spark Session created successfully.")
+    print("Spark Session created. Reading asset inventory data...")
 
-    # 2. Define the Canonical Schema
-    # This tells Spark what the structure of our incoming data should be.
-    # It's based on the 'security_event_v1.json' schema file we created.
-    event_schema = StructType([
-        StructField("eventId", StringType(), True),
-        StructField("eventTime", TimestampType(), True),
-        StructField("sourceSystem", StringType(), True),
-        StructField("eventName", StringType(), True),
-        StructField("eventSource", MapType(StringType(), StringType()), True),
-        StructField("eventTarget", MapType(StringType(), StringType()), True),
-        StructField("eventDetails", MapType(StringType(), StringType()), True),
-        StructField("severity", StringType(), True),
-    ])
-
-    # 3. Read Mock Data into a DataFrame
-    # We point Spark to our mock data directory. Spark can read multiple files at once.
-    # The 'schema' option enforces our defined structure on the data.
+    # 1. Read the iam_roles.json file
     try:
-        input_df = spark.read.option("multiLine", True).schema(event_schema).json("../mock-data/*.json")
-        print("Successfully read mock data.")
+        asset_df = spark.read.option("multiLine", True).json("../../cloud-asset-inventory/iam_roles.json")
+        print("Successfully read iam_roles.json")
     except Exception as e:
-        print(f"Error reading mock data: {e}")
+        print(f"Error reading asset data. Make sure 'iam_roles.json' exists. Error: {e}")
         spark.stop()
         return
 
-    # 4. Perform a Simple Transformation
-    # We add a new column to track when the data was processed by this ETL job.
-    # This is a common practice in data engineering.
-    transformed_df = input_df.withColumn("ingestionTimestamp", current_timestamp())
+    # 2. Transform the data for the graph model
+    nodes_df = asset_df.withColumn("labels", lit("IAMRole")) \
+                       .withColumnRenamed("RoleName", "name") \
+                       .withColumnRenamed("Arn", "arn")
 
-    # 5. Show the Result
-    # This displays the transformed data in the console, so we can verify our work.
-    print("Transformed Data Schema:")
-    transformed_df.printSchema()
+    print("Transformed data into nodes format:")
+    nodes_df.show(5)
 
-    print("Writing transformed data to Parquet format...")
-    transformed_df.write.mode("overwrite").parquet("../output_data")
-    print("Write successful.")
+    # 3. Write the DataFrame to Neo4j
+    print("Writing nodes to Neo4j...")
+    try:
+        nodes_df.write \
+            .format("org.neo4j.spark.DataSource") \
+            .mode("Overwrite") \
+            .option("url", "neo4j://192.168.49.2:32725") \
+            .option("authentication.type", "basic") \
+            .option("authentication.basic.username", "neo4j") \
+            .option("authentication.basic.password", "please-change-this-password") \
+            .option("labels", ":IAMRole") \
+            .option("node.properties", "name,arn") \
+	    .option("node.keys", "arn") \
+            .save()
+        print("Successfully wrote data to Neo4j.")
+    except Exception as e:
+        print(f"An error occurred while writing to Neo4j: {e}")
 
-    # 6. Stop the Spark Session
-    # It's important to release the resources when the job is done.
     spark.stop()
 
 if __name__ == '__main__':
