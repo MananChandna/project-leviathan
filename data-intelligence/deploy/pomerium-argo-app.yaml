@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pomerium
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://helm.pomerium.io'
+    targetRevision: 41.1.0 
+    chart: pomerium
+    helm:
+      values: |
+        # This is a minimal configuration to get Pomerium's core services running.
+        # We will add a real identity provider and routes to protect later.
+        authenticate:
+          # Pomerium needs to know its own public URL to function.
+          # In the real cluster, this will be set to a public domain.
+          # For now, we use a placeholder service name.
+          url: "https://authenticate.pomerium.localhost"
+
+        # IMPORTANT: Replace these with the secret values you generated.
+        config:
+          sharedSecret: "PASTE_YOUR_FIRST_SECRET_HERE"
+          cookieSecret: "PASTE_YOUR_SECOND_SECRET_HERE"
+
+        # For local testing, we will expose the proxy via a NodePort
+        proxy:
+          service:
+            type: NodePort
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: 'pomerium' 
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
