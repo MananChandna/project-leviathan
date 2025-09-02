@@ -1,0 +1,23 @@
+config:
+
+  sharedSecret: "PASTE_YOUR_SHARED_SECRET_HERE" 
+  cookieSecret: "PASTE_YOUR_COOKIE_SECRET_HERE" 
+
+  policy:
+    - from: https://grafana.corp.example.com
+      to: http://grafana.default.svc.cluster.local 
+      allowed_users:
+        - your.email@gmail.com 
+
+authenticate:
+  url: https://authenticate.corp.example.com
+  idp:
+    provider: google
+    clientID: "PASTE_YOUR_CLIENT_ID_HERE"
+    clientSecret: "PASTE_YOUR_CLIENT_SECRET_HERE"
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
